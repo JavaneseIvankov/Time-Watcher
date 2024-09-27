@@ -1,7 +1,5 @@
-import signal
-
 import datetime_util as du
-import session_managers as sm
+import session_logger as logger
 import util
 
 
@@ -25,7 +23,6 @@ def main():
             util.send_notification()
             util.play_sound()
             util.proc_write("surpassed", 1)
-            # sm.finish_session(du.time_now())
             util.sleep(1)
         elif remaining >= du.TD_ZERO and status:
             print("running")
@@ -34,6 +31,7 @@ def main():
             print("idle")
             util.sleep(1)
 
+    logger.log_session()
     # util.post_process_cleanup()
 
 

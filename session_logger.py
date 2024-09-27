@@ -1,7 +1,14 @@
 from copy import deepcopy
 
 import constants as const
+import session_log_parser as slp
 import util
+
+
+def tbi():
+    # Implement config sourcing
+    pass
+
 
 # format specifiers (fs)
 fs = {
@@ -12,8 +19,11 @@ fs = {
     "%o": "offset",
     "%ts": "time_spent",
 }
+
+chosen_path = "/home/arundaya/Documents/Workspace/General_Vault/99 Meta-Functional/992 Pomodoro Logs/992-1 Pomodoro Log.md"
+fallback_path = const.SESSION_LOG_PATH
 custom_template = const.CUSTOM_TEMPLATE
-# chosen_template = const.CHOSEN_TEMPLATE
+
 
 template = {
     "short": f"%st - %ft (%ts) short",
@@ -28,21 +38,18 @@ def timedelta_formatter():
 
 def patch_fs():
     temp = deepcopy(fs)
-    for k, v in fs.items():
-        temp[k] = util.proc_read(v)
+    for k, v in fs.items():  # key = fs; value = fullspec
+        temp[k] = slp.parserDispatch(v, util.proc_read(v))
+        # temp[k] = util.proc_read(v)
     return temp
 
 
-def log_write():
-    pass
-
-
-def load_template(_chosen: str) -> str | None:
+def load_template(_chosen: str) -> str:
     try:
         temp = template[_chosen]
     except KeyError:
         print("[load_template] Invalid choice")
-        return
+        return ""
     data = patch_fs()
     out = temp
     for k, v in data.items():
@@ -51,8 +58,11 @@ def load_template(_chosen: str) -> str | None:
 
 
 def log_session():
+    # load_config()
     out = load_template(util.proc_read("chosen_template"))
-    return out
+    path = chosen_path
+    util.append_file(path, out)
+    print("Session logged")
 
 
 "[%st] -> [%ft] :: Goal duration - %d :: Offset - %o"

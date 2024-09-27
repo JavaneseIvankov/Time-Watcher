@@ -1,11 +1,13 @@
+from os import path
 from pathlib import Path
 
-CUSTOM_TEMPLATE = "[%st] -> [%ft] :: Goal duration - %d :: Offset - %o"
+CUSTOM_TEMPLATE = "[%st] -> [%ft] :: Goal duration - %d :: Time spent - %ts"
+
 
 # Path(s) constants
 ROOT_DIR = Path(__file__).parent
 SOUND_PATH = f"{ROOT_DIR}/default-sound.mp3"
-FALLBACK_SESSION_LOG_PATH = f"-"
+FALLBACK_SESSION_LOG_PATH = f"{path.join(Path.home(), 'timer_log.txt')}"
 PROC_FILE_PATH = f"{ROOT_DIR}/process.txt"
 PROC_PATH = f"{ROOT_DIR}/background_process.py"
 PROC_LOG_PATH = f"{ROOT_DIR}/process_log.log"

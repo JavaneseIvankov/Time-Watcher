@@ -5,8 +5,9 @@ import signal
 import subprocess
 import time
 
-import constants as const
 import psutil
+
+import constants as const
 
 const_pool = const.CONSTANTS_POOL
 
@@ -26,7 +27,7 @@ def send_notification():
 
 
 def retry_timeout(interval: int, attempt_timeout: int, callback):
-    for i in range(attempt_timeout):
+    for _ in range(attempt_timeout):
         if callback():
             return True
         time.sleep(interval)
@@ -35,7 +36,7 @@ def retry_timeout(interval: int, attempt_timeout: int, callback):
 
 def append_file(path: str, value: str):
     with open(file=path, mode="a") as f:
-        f.write(value)
+        f.write(value + "\n")
 
 
 def write_specific_line(

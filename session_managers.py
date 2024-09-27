@@ -1,6 +1,7 @@
 import datetime as d
 
 import datetime_util as du
+import session_logger as sl
 import util
 
 
@@ -44,7 +45,6 @@ def start_session(duration: int, start_time: d.datetime, target_time: d.datetime
 def terminate_session():
     PID = int(util.proc_read("pid"))
     valid_proc_start_time = float(util.proc_read("proc_start_time"))
-
     proc_start_time = util.get_process_start_time(PID)
 
     if proc_start_time == valid_proc_start_time:
@@ -60,12 +60,15 @@ def terminate_session():
 def finish_session(time_now: d.datetime):
     target_time = du.parse_datetime(util.proc_read("target_time"))
     start_time = du.parse_datetime(util.proc_read("start_time"))
-    offset = target_time - time_now
+    offset = time_now - target_time
+    time_spent = target_time - start_time + offset
 
     util.proc_write("status", 0)
     util.proc_write("finish_time", time_now)
     util.proc_write("offset", offset.total_seconds())
-    util.proc_write("time_spent", target_time + offset)
+    util.proc_write("time_spent", time_spent.total_seconds())
+
+    sl.log_session()
 
     print(
         f"You've finished a session, time spent: {du.substract_time(start_time, time_now)}"
