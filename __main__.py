@@ -31,8 +31,8 @@ def parse_raw_duration(args) -> tuple[int, int]:
 
 def main():
     parser = argparse.ArgumentParser(
-        prog="Pomo-CLI",
-        description="Pomodoro program with CLI interface, focuses on simplicity and effectiveness",
+        prog="Time-Watcher",
+        description="Timer/time-tracker program with CLI interface, focuses on simplicity and effectiveness",
     )
     parser.add_argument(
         "-Lt", "--loadtemplate", dest="load_signal", action="store_true"

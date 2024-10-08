@@ -39,8 +39,8 @@ def timedelta_formatter():
 def patch_fs():
     temp = deepcopy(fs)
     for k, v in fs.items():  # key = fs; value = fullspec
+        # read values in proc.txt and pipe it to parser
         temp[k] = slp.parserDispatch(v, util.proc_read(v))
-        # temp[k] = util.proc_read(v)
     return temp
 
 
@@ -59,10 +59,30 @@ def load_template(_chosen: str) -> str:
 
 def log_session():
     # load_config()
-    out = load_template(util.proc_read("chosen_template"))
+    buff = ""
+    out = load_template(util.proc_read("chosen_template")) + "\n"
     path = chosen_path
-    util.append_file(path, out)
+
+    buff += prefix_hooks()
+    buff += out
+    buff += suffix_hooks()
+
+    util.append_file(path, buff)
     print("Session logged")
+
+
+def prefix_hooks(*args) -> str:
+    buff = ""
+    for f in args:
+        buff += f() + "\n"
+    return buff
+
+
+def suffix_hooks(*args):
+    buff = ""
+    for f in args:
+        buff += f() + "\n"
+    return buff
 
 
 "[%st] -> [%ft] :: Goal duration - %d :: Offset - %o"

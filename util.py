@@ -5,9 +5,8 @@ import signal
 import subprocess
 import time
 
-import psutil
-
 import constants as const
+import psutil
 
 const_pool = const.CONSTANTS_POOL
 
